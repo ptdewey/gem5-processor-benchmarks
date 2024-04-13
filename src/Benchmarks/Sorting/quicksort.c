@@ -11,7 +11,7 @@ int partition(int array[], int low, int high);
 void swap(int* a, int* b);
 void printArray(int array[], int length);
 
-int main(int argc, char** argv) {
+int main(int argc, char* argv[]) {
 	int length;
 	if (argc == 1)
 	{

@@ -10,7 +10,7 @@ void mergeSort(int* array, int low, int high);
 void merge(int* array, int low, int mid, int high);
 void printArray(int array[], int length);
 
-int main(int argc, char **argv) {
+int main(int argc, char* argv[]) {
 	int length;
 	if (argc == 1)
 	{
