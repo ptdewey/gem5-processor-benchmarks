@@ -51,14 +51,28 @@ from caches import *
 # import the SimpleOpts module
 from common import SimpleOpts
 
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-b", "--binary", type=str, help="Binary Executable")
+parser.add_argument("-i", "--isa", type=str, help="Target ISA")
+args = parser.parse_args()
+
 # specify which ISA to use "X86" or "ARM" currently
-current_isa = sys.argv[2]
+if not args.binary:
+    print("Binary not specified. Exiting...")
+    exit(1)
+if not args.isa:
+    print("ISA not specified. Exiting...")
+    exit(1)
 
-thispath = os.path.dirname(os.path.realpath(__file__))
+binary = args.binary
+current_isa = args.isa
 
+# thispath = os.path.dirname(os.path.realpath(__file__))
 # Default to running 'hello', use the compiled ISA to find the binary
 # grab the specific path to the binary
-binary = os.path.join(thispath, sys.argv[1])
+# binary = os.path.join(thispath, binary)
 # default_binary = os.path.join( thispath, "./nq86",  # TODO: change this to a cli arg)
 
 # Binary to execute
