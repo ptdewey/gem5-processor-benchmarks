@@ -51,19 +51,18 @@ from caches import *
 # import the SimpleOpts module
 from common import SimpleOpts
 
-# Default to running 'hello', use the compiled ISA to find the binary
-# grab the specific path to the binary
-target_binary = sys.argv[1]
+# specify which ISA to use "X86" or "ARM" currently
+current_isa = sys.argv[2]
 
 thispath = os.path.dirname(os.path.realpath(__file__))
-default_binary = os.path.join(
-    thispath,
-    target_binary
-    # "./nq86",  # TODO: change this to a cli arg
-)
+
+# Default to running 'hello', use the compiled ISA to find the binary
+# grab the specific path to the binary
+binary = os.path.join(thispath, sys.argv[1])
+# default_binary = os.path.join( thispath, "./nq86",  # TODO: change this to a cli arg)
 
 # Binary to execute
-SimpleOpts.add_option("binary", nargs="?", default=default_binary)
+SimpleOpts.add_option("binary", nargs="?", default=binary)
 
 # Finalize the arguments and grab the args so we can pass it on to our objects
 args = SimpleOpts.parse_args()
@@ -80,10 +79,15 @@ system.clk_domain.voltage_domain = VoltageDomain()
 system.mem_mode = "timing"  # Use timing accesses
 system.mem_ranges = [AddrRange("8192MB")]  # Create an address range
 
-# Create a simple CPU
-# TODO: change these 2 lines (possibly to cli arg)
-# - conditional choose cpu from cli arg or stdin
-system.cpu = X86O3CPU()
+# Create a CPU based on `current_isa`
+if current_isa == "X86":
+    system.cpu = X86O3CPU()
+elif current_isa == "ARM":
+    system.cpu = ARMO3CPU()
+else:
+    exit(1)
+
+# set branch prediction method
 system.cpu.branchPred = TAGE()
 
 # Create an L1 instruction and data cache
@@ -112,11 +116,11 @@ system.membus = SystemXBar()
 system.l2cache.connectMemSideBus(system.membus)
 '''
 
-# Create a memory bus, a coherent crossbar, in this case 
-system.l2bus = L2XBar() 
- 
-# Hook the CPU ports up to the l2bus 
-system.cpu.icache.connectBus(system.l2bus) 
+# Create a memory bus, a coherent crossbar, in this case
+system.l2bus = L2XBar()
+
+# Hook the CPU ports up to the l2bus
+system.cpu.icache.connectBus(system.l2bus)
 system.cpu.dcache.connectBus(system.l2bus)
 
 # Create an L2 cache and connect it to the l2bus
@@ -128,27 +132,27 @@ L4set = 0
 if (L4set==1): #Add L3 and L4
   #Create a memory bus, for L3 cache
   system.l3bus = L3XBar()
-  
+
   #Hook up the L2 cache to the L3 cache bus
   system.l2cache.connectMemSideBus(system.l3bus)
-  
+
   #Create an L3 cache and connect it to the l3 bus
   system.l3cache = L3Cache()
   system.l3cache.connectCPUSideBus(system.l3bus)
-  
+
   #Create a memory bus, for L4 cache
   system.l4bus = L4XBar()
-  
+
   #Hook up the L3 cache to the L4 cache bus
   system.l3cache.connectMemSideBus(system.l4bus)
-  
+
   #Create an L4 cache and connect it to the l4 bus
   system.l4cache = L4Cache()
   system.l4cache.connectCPUSideBus(system.l4bus)
-  
+
   # Create a memory bus
   system.membus = SystemXBar()
-  
+
   # Connect the L4 cache to the membus
   system.l4cache.connectMemSideBus(system.membus)
 
@@ -168,18 +172,20 @@ else: #only add L3
   system.membus = SystemXBar()
 
   system.l3cache.connectMemSideBus(system.membus)
-  
+
 
 # create the interrupt controller for the CPU
 system.cpu.createInterruptController()
 
 
+# NOTE:
 # For X86 only we make sure the interrupts care connect to memory.
 # Note: these are directly connected to the memory bus and are not cached.
 # For other ISA you should remove the following three lines.
-system.cpu.interrupts[0].pio = system.membus.mem_side_ports
-system.cpu.interrupts[0].int_requestor = system.membus.cpu_side_ports
-system.cpu.interrupts[0].int_responder = system.membus.mem_side_ports
+if current_isa == "X86":
+    system.cpu.interrupts[0].pio = system.membus.mem_side_ports
+    system.cpu.interrupts[0].int_requestor = system.membus.cpu_side_ports
+    system.cpu.interrupts[0].int_responder = system.membus.mem_side_ports
 
 
 # Connect the system up to the membus

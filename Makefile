@@ -1,16 +1,8 @@
-.PHONY: build debug clean dir
+.PHONY: all clean
 
-all: build
-
-dir:
-	@mkdir -p build
-
-build: dir
-	@find src/Benchmarks -type f -name '*.c' -exec sh -c 'gcc {} -o build/`basename {} .c`' \;
-
-debug: dir
-	# NOTE: can add -Wall -Wextra -Werror if desired
-	@find src/Benchmarks -type f -name '*.c' -exec sh -c 'gcc -g -DDEBUG=1 {} -o build/`basename {} .c`' \;
+all:
+	@./compile.sh
 
 clean:
-	rm -rf build
+	@echo "Cleaning build directories..."
+	@rm -rf build/X86 build/ARM
