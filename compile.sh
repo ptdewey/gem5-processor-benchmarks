@@ -25,8 +25,8 @@ compile_arm() {
     echo "Compiling for ARM..."
     for file in $(find src/Benchmarks -type f -name '*.c'); do
         filename=$(basename "${file}" .c)
-        ./dockcross-linux-armv7 bash -c "gcc -O0 -ggdb3 -std=c99  -o '${BUILD_DIR_ARM}/${filename}' '${file}'"
-        # ./dockcross-linux-arm64 bash -c "gcc -o '${BUILD_DIR_ARM}/${filename}' '${file}'"
+        ./dockcross-linux-armv7 bash -c '$CC '"${file}"' -O0 -ggdb3 -std=c99 -o '"${BUILD_DIR_ARM}/${filename}"
+        # ./dockcross-linux-arm64 bash -c '$CC '"${file}"' -O0 -ggdb3 -std=c99 -o '"${BUILD_DIR_ARM}/${filename}"
     done
 }
 
