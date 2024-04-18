@@ -11,7 +11,8 @@ run_simulation() {
     local isa=$2
     # local processor_type=$3
     local gem5_dir="${HOME}/gem5_workspace/gem5/build/${isa}"
-    local script="main.py --isa ${isa} --binary ${binary_name}"
+    # local script="main.py --isa ${isa} --binary ${binary_name}"
+    local script="main.py ${binary_name} ${isa}"
     local binname=$(basename "$binary_name")
     local stats_file="stats-${binname}-${isa}.txt"
 
@@ -28,7 +29,7 @@ for isa_dir in "$build_dir"/*; do
             run_simulation $binary $isa_type &
         elif [ "$isa_type" == "ARM" ]; then
             echo "Running ARM for $binary"
-            run_simulation ${binary} ${isa_type}
+            run_simulation $binary $isa_type &
         else
             echo "Unknown ISA type for $binary"
         fi

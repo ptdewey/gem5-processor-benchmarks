@@ -51,35 +51,20 @@ from caches import *
 # import the SimpleOpts module
 from common import SimpleOpts
 
-import argparse
-
-parser = argparse.ArgumentParser()
-parser.add_argument("-b", "--binary", type=str, help="Binary Executable")
-parser.add_argument("-i", "--isa", type=str, help="Target ISA")
-args = parser.parse_args()
-
-# specify which ISA to use "X86" or "ARM" currently
-if not args.binary:
-    print("Binary not specified. Exiting...")
-    exit(1)
-if not args.isa:
-    print("ISA not specified. Exiting...")
-    exit(1)
-
-binary = args.binary
-current_isa = args.isa
-
-# thispath = os.path.dirname(os.path.realpath(__file__))
-# Default to running 'hello', use the compiled ISA to find the binary
-# grab the specific path to the binary
-# binary = os.path.join(thispath, binary)
-# default_binary = os.path.join( thispath, "./nq86",  # TODO: change this to a cli arg)
 
 # Binary to execute
-SimpleOpts.add_option("binary", nargs="?", default=binary)
-
-# Finalize the arguments and grab the args so we can pass it on to our objects
+SimpleOpts.add_option("binary")
+SimpleOpts.add_option("isa")
 args = SimpleOpts.parse_args()
+
+thispath = os.path.dirname(os.path.realpath(__file__))
+
+# Default to running 'hello', use the compiled ISA to find the binary
+# grab the specific path to the binary
+binary = str(os.path.join(thispath, args.binary))
+# default_binary = os.path.join( thispath, "./nq86",  # TODO: change this to a cli arg)
+
+current_isa = args.isa
 
 # create the system we are going to simulate
 system = System()
@@ -95,14 +80,17 @@ system.mem_ranges = [AddrRange("8192MB")]  # Create an address range
 
 # Create a CPU based on `current_isa`
 if current_isa == "X86":
-    system.cpu = X86O3CPU()
+    # system.cpu = X86O3CPU()
+    system.cpu = TimingSimpleCPU()
 elif current_isa == "ARM":
-    system.cpu = ARMO3CPU()
+    # system.cpu = O3CPU()
+    system.cpu = TimingSimpleCPU()
 else:
+    print("no isa passed in")
     exit(1)
 
 # set branch prediction method
-system.cpu.branchPred = TAGE()
+# system.cpu.branchPred = TAGE()
 
 # Create an L1 instruction and data cache
 system.cpu.icache = L1ICache(args)
@@ -211,13 +199,14 @@ system.mem_ctrl.dram = DDR3_1600_8x8()
 system.mem_ctrl.dram.range = system.mem_ranges[0]
 system.mem_ctrl.port = system.membus.mem_side_ports
 
-system.workload = SEWorkload.init_compatible(args.binary)
+# FIX: broken for ARM
+system.workload = SEWorkload.init_compatible(binary)
 
 # Create a process for a simple "Hello World" application
 process = Process()
 # Set the command
 # cmd is a list which begins with the executable (like argv)
-process.cmd = [args.binary]
+process.cmd = [binary]
 # Set the cpu to use the process as its workload and create thread contexts
 system.cpu.workload = process
 system.cpu.createThreads()
