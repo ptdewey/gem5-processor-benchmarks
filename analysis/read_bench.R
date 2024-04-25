@@ -27,9 +27,28 @@ read_simulation_data <- function(file_path) {
     return(df)
 }
 
-simulation_data <- read_simulation_data(file_path)
-print(head(simulation_data, 10))
+# simulation_data <- read_simulation_data(file_path)
+# print(head(simulation_data, 10))
 
 # NOTE: write to csv to check if output looks correct
-write.csv(simulation_data, "output.csv", row.names = FALSE)
+# write.csv(simulation_data, "output.csv", row.names = FALSE)
 
+# Function to merge data from multiple files into a single dataframe
+merge_simulation_data <- function(directory) {
+    files <- list.files(directory, pattern = "\\.txt$", full.names = TRUE)
+    if (length(files) == 0) return(data.frame())
+
+    merged_df <- read_simulation_data(files[1])
+    colnames(merged_df) <- c("metric", tools::file_path_sans_ext(basename(files[1])))
+
+    for (file in files[-1]) {
+        data <- read_simulation_data(file)
+        colnames(data) <- c("metric", tools::file_path_sans_ext(basename(file)))
+        merged_df <- merge(merged_df, data, by = "metric", all = TRUE)
+    }
+    return(merged_df)
+}
+
+df <- merge_simulation_data(file_path)
+print(head(df, 10))
+write.csv(df, "benchmark_stats/all_stats.csv", row.names = FALSE)
