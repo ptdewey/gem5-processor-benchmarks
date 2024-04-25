@@ -45,24 +45,33 @@ from m5.objects import *
 
 # Add the common scripts to our path
 m5.util.addToPath("./gem5/configs/")
-# import the caches which we made
-from caches import *
 
 # import the SimpleOpts module
 from common import SimpleOpts
 
-
 # Binary to execute
 SimpleOpts.add_option("binary")
+SimpleOpts.add_option("arch_generation")
 SimpleOpts.add_option("isa")
 args = SimpleOpts.parse_args()
+
+# import the caches
+# NOTE: one file can be found for each generation
+if args.arch_generation == "broadwell":
+    from broadwell_caches import *
+elif args.arch_generation == "skylake":
+    from skylake_caches import *
+else:
+    # default case (broadwell)
+    from broadwell_caches import *
+
 
 thispath = os.path.dirname(os.path.realpath(__file__))
 
 # Default to running 'hello', use the compiled ISA to find the binary
 # grab the specific path to the binary
 binary = str(os.path.join(thispath, args.binary))
-# default_binary = os.path.join( thispath, "./nq86",  # TODO: change this to a cli arg)
+# default_binary = os.path.join( thispath, "./nq86")
 
 current_isa = args.isa
 
@@ -80,17 +89,17 @@ system.mem_ranges = [AddrRange("8192MB")]  # Create an address range
 
 # Create a CPU based on `current_isa`
 if current_isa == "X86":
-    # system.cpu = X86O3CPU()
-    system.cpu = TimingSimpleCPU()
+    system.cpu = X86O3CPU()
+    # system.cpu = TimingSimpleCPU()
 elif current_isa == "ARM":
-    # system.cpu = O3CPU()
-    system.cpu = TimingSimpleCPU()
+    system.cpu = O3CPU()
+    # system.cpu = TimingSimpleCPU()
 else:
     print("no isa passed in")
     exit(1)
 
 # set branch prediction method
-# system.cpu.branchPred = TAGE()
+system.cpu.branchPred = TAGE()
 
 # Create an L1 instruction and data cache
 system.cpu.icache = L1ICache(args)
@@ -199,7 +208,6 @@ system.mem_ctrl.dram = DDR3_1600_8x8()
 system.mem_ctrl.dram.range = system.mem_ranges[0]
 system.mem_ctrl.port = system.membus.mem_side_ports
 
-# FIX: broken for ARM
 system.workload = SEWorkload.init_compatible(binary)
 
 # Create a process for a simple "Hello World" application

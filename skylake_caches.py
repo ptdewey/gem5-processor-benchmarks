@@ -113,11 +113,11 @@ class L2Cache(Cache):
     """Simple L2 Cache with default values"""
 
     # Default parameters
-    size = "256kB"
-    assoc = 8
-    tag_latency = 12
-    data_latency = 12
-    response_latency = 12
+    size = "1024kB"
+    assoc = 16
+    tag_latency = 14
+    data_latency = 14
+    response_latency = 14
     mshrs = 20
     tgts_per_mshr = 12
 
@@ -138,10 +138,7 @@ class L2Cache(Cache):
 
 
 class L3Cache(Cache):
-    size = '32768kB'
-    # size = "16384kB"
-    # size = '8192kB'
-    # size = '131072kB'
+    size = '16384kB'
     assoc = 8
     tag_latency = 50
     data_latency = 50
@@ -161,7 +158,7 @@ class L3Cache(Cache):
         self.cpu_side = bus.mem_side_ports
 
     def connectMemSideBus(self, bus):
-        self.mem_side = bus.cpu_side_ports   
+        self.mem_side = bus.cpu_side_ports
 
 
 class L4Cache(Cache):
