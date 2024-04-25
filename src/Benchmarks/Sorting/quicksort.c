@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define DEFAULT_LENGTH 100
+#define DEFAULT_LENGTH 1024
 
 // FUNCTION HEADERS
 void quicksort(int *array, int low, int high);
@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 	{
 		length = DEFAULT_LENGTH;
 		#ifdef DEBUG
-			printf("No array length specified. Using default length of %d\n.", 
+			printf("No array length specified. Using default length of %d\n.",
 				DEFAULT_LENGTH);
 		#endif
 	}
@@ -67,9 +67,9 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-void quicksort(int *array, int low, int high) 
+void quicksort(int *array, int low, int high)
 {
-    if (low < high) 
+    if (low < high)
 	{
         int pi = partition(array, low, high);
         quicksort(array, low, pi - 1);
@@ -77,14 +77,14 @@ void quicksort(int *array, int low, int high)
     }
 }
 
-int partition(int *array, int low, int high) 
+int partition(int *array, int low, int high)
 {
     int pivot = array[high];
     int i = (low - 1);
 
-    for (int j = low; j <= high - 1; j++) 
+    for (int j = low; j <= high - 1; j++)
 	{
-        if (array[j] < pivot) 
+        if (array[j] < pivot)
 		{
             i++;
             swap(&array[i], &array[j]);
@@ -94,7 +94,7 @@ int partition(int *array, int low, int high)
     return (i + 1);
 }
 
-void swap(int* a, int* b) 
+void swap(int* a, int* b)
 {
     int temp = *a;
     *a = *b;
@@ -103,7 +103,7 @@ void swap(int* a, int* b)
 
 void printArray(int array[], int length)
 {
-    for (int i = 0; i < length; i++) 
+    for (int i = 0; i < length; i++)
 	{
         printf("%d ", array[i]);
     }

@@ -52,14 +52,15 @@ from common import SimpleOpts
 # Binary to execute
 SimpleOpts.add_option("binary")
 SimpleOpts.add_option("arch_generation")
-SimpleOpts.add_option("isa")
+# SimpleOpts.add_option("arch_generation", nargs="?", default="Broadwell")
+SimpleOpts.add_option("isa", nargs="?", default="X86")
 args = SimpleOpts.parse_args()
 
 # import the caches
 # NOTE: one file can be found for each generation
-if args.arch_generation == "broadwell":
+if args.arch_generation == "Broadwell":
     from broadwell_caches import *
-elif args.arch_generation == "skylake":
+elif args.arch_generation == "Skylake":
     from skylake_caches import *
 else:
     # default case (broadwell)

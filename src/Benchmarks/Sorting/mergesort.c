@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define DEFAULT_LENGTH 100
+#define DEFAULT_LENGTH 1024
 
 // FUNCTION HEADERS
 void mergeSort(int* array, int low, int high);
@@ -16,7 +16,7 @@ int main(int argc, char* argv[]) {
 	{
 		length = DEFAULT_LENGTH;
 		#ifdef DEBUG
-			printf("No array length specified. Using default length of %d\n.", 
+			printf("No array length specified. Using default length of %d\n.",
 				DEFAULT_LENGTH);
 		#endif
 	}
@@ -66,9 +66,9 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-void mergeSort(int* array, int low, int high) 
+void mergeSort(int* array, int low, int high)
 {
-    if (low < high) 
+    if (low < high)
 	{
         int mid = low + (high - low) / 2;
         mergeSort(array, low, mid);
@@ -84,24 +84,24 @@ void merge(int* array, int low, int mid, int high) {
     int* leftArray = (int*) malloc(leftLength * sizeof(int));
     int* rightArray = (int*) malloc(rightLength * sizeof(int));
 
-    for (int i = 0; i < leftLength; i++) 
+    for (int i = 0; i < leftLength; i++)
 	{
         leftArray[i] = array[low + i];
     }
-    for (int j = 0; j < rightLength; j++) 
+    for (int j = 0; j < rightLength; j++)
 	{
         rightArray[j] = array[mid + 1 + j];
     }
 
     int i = 0, j = 0, k = low;
 
-    while (i < leftLength && j < rightLength) 
+    while (i < leftLength && j < rightLength)
 	{
-        if (leftArray[i] <= rightArray[j]) 
+        if (leftArray[i] <= rightArray[j])
 		{
             array[k] = leftArray[i];
             i++;
-        } else 
+        } else
 		{
             array[k] = rightArray[j];
             j++;
@@ -109,7 +109,7 @@ void merge(int* array, int low, int mid, int high) {
         k++;
     }
 
-    while (i < leftLength) 
+    while (i < leftLength)
 	{
         array[k] = leftArray[i];
         i++;
@@ -126,9 +126,9 @@ void merge(int* array, int low, int mid, int high) {
     free(rightArray);
 }
 
-void printArray(int array[], int length) 
+void printArray(int array[], int length)
 {
-    for (int i = 0; i < length; i++) 
+    for (int i = 0; i < length; i++)
 	{
         printf("%d ", array[i]);
     }

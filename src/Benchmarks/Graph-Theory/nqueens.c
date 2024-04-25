@@ -3,11 +3,11 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define BOARD_SIZE 8
+#define BOARD_SIZE 10
 
 int count; // Number of solutions
 
-// Function headers 
+// Function headers
 void solve(int n, int col, int *hist);
 
 int main(int argc, char* argv[])
@@ -17,7 +17,7 @@ int main(int argc, char* argv[])
 	{
 		boardSize = BOARD_SIZE;
 		#ifdef DEBUG
-			printf("No size specified. Using default board size of %d x %d.\n", 
+			printf("No size specified. Using default board size of %d x %d.\n",
 				BOARD_SIZE, BOARD_SIZE);
 		#endif
 	}
@@ -53,7 +53,7 @@ int main(int argc, char* argv[])
 
 void solve(int n, int col, int *hist)
 {
-	if (col == n) 
+	if (col == n)
 	{
 		//printf("\nNo. %d\n-----\n", ++count);
 		//for (int i = 0; i < n; i++, putchar('\n'))
@@ -62,9 +62,9 @@ void solve(int n, int col, int *hist)
                 count++;
 		return;
 	}
- 
+
 	#define attack(i, j) (hist[j] == i || abs(hist[j] - i) == col - j)
-	for (int i = 0, j = 0; i < n; i++) 
+	for (int i = 0, j = 0; i < n; i++)
 	{
 		for (j = 0; j < col && !attack(i, j); j++);
 			if (j < col) continue;

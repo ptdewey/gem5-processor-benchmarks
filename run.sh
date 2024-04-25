@@ -8,6 +8,7 @@ output_dir="./benchmark_stats"
 
 # TODO: architecture generations (broadwell, skylake, {icelake?})
 # - add in list and iterate over, add to cli args
+generations=("Broadwell" "Skylake")
 
 run_simulation() {
     local binary_name=$1
@@ -25,19 +26,25 @@ run_simulation() {
     "${gem5_dir}/gem5.opt" --stats-file="${stats_file}" -d "${output_dir}" ${script} ${args} &
 }
 
+# iterate over ISA types with compiled binaries in ./build
 for isa_dir in "$build_dir"/*; do
     isa_type=$(basename "$isa_dir")
-    for binary in "$isa_dir"/*; do
-        echo "Processing $binary for ISA $isa_type"
-        if [ "$isa_type" == "X86" ]; then
-            echo "Running X86 for $binary"
-            run_simulation $binary $isa_type
-        elif [ "$isa_type" == "ARM" ]; then
-            echo "Running ARM for $binary"
-            run_simulation $binary $isa_type
-        else
-            echo "Unknown ISA type for $binary"
-        fi
+    # iterate over architectural generations
+    for gen in generations; do
+        # iterate over binaries within ISA build directory
+        for binary in "$isa_dir"/*; do
+            echo "Processing $binary for ISA $isa_type"
+            if [ "$isa_type" == "X86" ]; then
+                echo "Running X86 for $binary"
+                run_simulation $binary $gen $isa_type
+            elif [ "$isa_type" == "ARM" ]; then
+                echo "Running ARM for $binary"
+                run_simulation $binary $gen $isa_type
+            else
+                echo "Unknown ISA type for $binary"
+            fi
+        done
+
     done
     wait
 done

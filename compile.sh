@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Exit on any error
 set -e
@@ -32,6 +32,8 @@ compile_arm() {
 
 # Execute compilation functions
 compile_x86
-compile_arm
+if [ -f ./dockcross-linux-armv7 ]; then
+    compile_arm
+fi
 
 echo "Compilation complete."
