@@ -93,8 +93,8 @@ if current_isa == "X86":
     system.cpu = X86O3CPU()
     # system.cpu = TimingSimpleCPU()
 elif current_isa == "ARM":
-    system.cpu = O3CPU()
-    # system.cpu = TimingSimpleCPU()
+    # system.cpu = ArmO3CPU()
+    system.cpu = TimingSimpleCPU()
 else:
     print("no isa passed in")
     exit(1)

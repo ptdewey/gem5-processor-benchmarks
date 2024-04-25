@@ -16,7 +16,7 @@ compile_x86() {
     echo "Compiling for X86..."
     for file in $(find src/Benchmarks -type f -name '*.c'); do
         filename=$(basename "${file}" .c)
-        gcc -O0 -ggdb3 -std=c99 "${file}" -o "${BUILD_DIR_X86}/${filename}"
+        gcc -O0 -ggdb3 -std=c99 -static "${file}" -o "${BUILD_DIR_X86}/${filename}"
     done
 }
 
@@ -25,15 +25,13 @@ compile_arm() {
     echo "Compiling for ARM..."
     for file in $(find src/Benchmarks -type f -name '*.c'); do
         filename=$(basename "${file}" .c)
-        ./dockcross-linux-armv7 bash -c '$CC '"${file}"' -O0 -ggdb3 -std=c99 -o '"${BUILD_DIR_ARM}/${filename}"
+        ./dockcross-linux-armv7 bash -c '$CC '"${file}"' -O0 -ggdb3 -std=c99 -static -o '"${BUILD_DIR_ARM}/${filename}"
         # ./dockcross-linux-arm64 bash -c '$CC '"${file}"' -O0 -ggdb3 -std=c99 -o '"${BUILD_DIR_ARM}/${filename}"
     done
 }
 
 # Execute compilation functions
 compile_x86
-if [ -f ./dockcross-linux-armv7 ]; then
-    compile_arm
-fi
+! [ -z "$1" ] && compile_arm
 
 echo "Compilation complete."

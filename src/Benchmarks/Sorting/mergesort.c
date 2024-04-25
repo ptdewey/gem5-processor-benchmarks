@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define DEFAULT_LENGTH 1024
+#define DEFAULT_LENGTH 16384
 
 // FUNCTION HEADERS
 void mergeSort(int* array, int low, int high);

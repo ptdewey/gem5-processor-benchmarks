@@ -20,7 +20,7 @@ run_simulation() {
     # local args="--isa ${isa} --binary ${binary_name}"
     local args="${binary_name} ${gen} ${isa}"
     local binname=$(basename "$binary_name")
-    local stats_file="stats-${binname}-${isa}.txt"
+    local stats_file="stats-${binname}-${gen}-${isa}.txt"
 
     echo "Running simulation for ${binary_name} with ISA ${isa} and processor type ${processor_type}..."
     "${gem5_dir}/gem5.opt" --stats-file="${stats_file}" -d "${output_dir}" ${script} ${args} &
@@ -30,10 +30,10 @@ run_simulation() {
 for isa_dir in "$build_dir"/*; do
     isa_type=$(basename "$isa_dir")
     # iterate over architectural generations
-    for gen in generations; do
+    for gen in "${generations[@]}"; do
         # iterate over binaries within ISA build directory
         for binary in "$isa_dir"/*; do
-            echo "Processing $binary for ISA $isa_type"
+            echo "Processing $binary for generation $gen with ISA $isa_type"
             if [ "$isa_type" == "X86" ]; then
                 echo "Running X86 for $binary"
                 run_simulation $binary $gen $isa_type
@@ -46,7 +46,7 @@ for isa_dir in "$build_dir"/*; do
         done
 
     done
-    wait
 done
+wait
 
 echo "All simulations completed."
