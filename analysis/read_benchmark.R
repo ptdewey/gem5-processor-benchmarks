@@ -18,7 +18,7 @@ if (!file.exists(file_path)) {
 read_simulation_data <- function(file_path) {
     lines <- read_lines(file_path)
     # select lines that potentially have three values before the comment
-    data_lines <- grep("^[^#]+\\s+\\d+\\s+(-?\\d+\\.\\d+%?\\s*){0,2}#.*$", lines, value = TRUE)
+    data_lines <- grep("^[^#]+\\s+-?\\d+(\\.\\d+)?\\s+(-?\\d+\\.\\d+%?\\s*){0,2}#.*$", lines, value = TRUE)
     df_list <- lapply(data_lines, function(line) {
         # remove the comment for easier processing
         clean_line <- sub("#.*", "", line)
@@ -40,7 +40,6 @@ read_simulation_data <- function(file_path) {
     return(df)
 }
 
-
 # simulation_data <- read_simulation_data(file_path)
 # print(head(simulation_data, 10))
 # write.csv(simulation_data, "output.csv", row.names = FALSE)
@@ -60,7 +59,6 @@ merge_simulation_data <- function(directory) {
     }
     return(merged_df)
 }
-
 
 # drop total percentage column
 df <- merge_simulation_data(file_path)
