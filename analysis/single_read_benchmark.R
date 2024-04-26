@@ -27,11 +27,9 @@ read_simulation_data <- function(file_path) {
     return(df)
 }
 
-# simulation_data <- read_simulation_data(file_path)
-# print(head(simulation_data, 10))
-
-# NOTE: write to csv to check if output looks correct
-# write.csv(simulation_data, "output.csv", row.names = FALSE)
+simulation_data <- read_simulation_data(file_path)
+print(head(simulation_data, 10))
+write.csv(simulation_data, "output.csv", row.names = FALSE)
 
 # Function to merge data from multiple files into a single dataframe
 merge_simulation_data <- function(directory) {
@@ -48,6 +46,7 @@ merge_simulation_data <- function(directory) {
     }
     return(merged_df)
 }
+
 
 df <- merge_simulation_data(file_path)
 print(head(df, 10))
