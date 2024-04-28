@@ -57,10 +57,25 @@ Based on this, it would be a reasonable assumption that Intel chose to reallocat
 
 -->
 
-- CPU dcache read/write miss rate is the same across both processors across all benchmarks (L1 caches are the same for both)
+##### Problem Sizes
+- GEMM (matrix N): 128, 256
+- N-Queens (number of queens): 10, 11
+- Dijkstras (number of vertices): 1000, 2500
+- QuickSort (number of elements): 32768, 65536, 131072
+- MergeSort (number of elements): 32768, 65536, 131072
+<!-- TODO: sort algorithms still finish much faster than other benchmarks, double again? -->
+
+<!--
+- GEMM takes longest time for med and large sizes
+- NQueens time grows exponentially O(N^N) with number of queens
+- Sorts take shortest time, could further increase size (even with 130k its ~15-20min)
+- Dijkstras large takes less time than GEMM but longer than others
+-->
+
 
 <!--
 Metrics Worth Looking At:
+- time spent (nqueens takes longer on skylake)
 - system.l2cache.ReadExReq.avgMissLatency::total
 - system.l2cache.overallAvgMissLatency.avgMissLatency::total
 - system.l2cache.replacements (very big differences between gens)
@@ -79,6 +94,7 @@ Maybe worth looking at:
 - l3bus.reqLayer0.occupancy
 -->
 
+- CPU dcache read/write miss rate is the same across both processors across all benchmarks (L1 caches are the same for both)
 ### GEMM
 - Broadwell
     - CPI: 0.797
@@ -94,6 +110,9 @@ Maybe worth looking at:
 
 ### MergeSort
 
+### Dijkstra
+- l2cache ReadExReq hits is very different between skylake and broadwell
+    - Total misses is less different but still interesting
 
 ## CPU Comparison
 

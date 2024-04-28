@@ -34,17 +34,11 @@ for isa_dir in "$build_dir"/*; do
         # iterate over binaries within ISA build directory
         for binary in "$isa_dir"/*; do
             echo "Processing $binary for generation $gen with ISA $isa_type"
-            if [ "$isa_type" == "X86" ]; then
-                echo "Running X86 for $binary"
-                run_simulation $binary $gen $isa_type
-            elif [ "$isa_type" == "ARM" ]; then
-                echo "Running ARM for $binary"
-                run_simulation $binary $gen $isa_type
-            else
-                echo "Unknown ISA type for $binary"
+            if [[ -f "$binary" ]]; then
+                echo "Processing $binary for generation $gen with ISA $isa_type"
+                run_simulation "$binary" $gen $isa_type
             fi
         done
-
     done
 done
 wait
