@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#define DEFAULT_DIMENSION 64 //matrix size
+#define DEFAULT_DIMENSION 128 //matrix size
 
 // Function headers
 void gemm(int** A, int** B, int** C, int dimension);
@@ -11,7 +11,7 @@ void printMatrix(int** matrix, int dimension);
 
 int main (int argc, char *argv[])
 {
-	int dimension; 
+	int dimension;
 	if (argc == 1)
 	{
 		dimension = DEFAULT_DIMENSION;
@@ -36,7 +36,7 @@ int main (int argc, char *argv[])
 	}
 
 	// Allocate and populate matrices
-  	int** A = (int**) malloc(dimension * sizeof(int*)); 
+  	int** A = (int**) malloc(dimension * sizeof(int*));
   	int** B = (int**) malloc(dimension * sizeof(int*));
 	int** C = (int**) malloc(dimension * sizeof(int*));
 	for (int i = 0; i < dimension; i++)
@@ -74,7 +74,7 @@ int main (int argc, char *argv[])
 	free(A);
 	free(B);
 	free(C);
-	
+
   	return (0);
 }
 
@@ -82,7 +82,7 @@ void gemm(int** A , int** B, int** C, int dimension)
 {
 	for (int i = 0; i < dimension; i++)
 	{
-        for (int j = 0; j < dimension; j++) 
+        for (int j = 0; j < dimension; j++)
 		{
             for (int k = 0; k < dimension; k++)
 			{
