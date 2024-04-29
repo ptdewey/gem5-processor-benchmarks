@@ -60,6 +60,8 @@ merge_simulation_data <- function(directory) {
     return(merged_df)
 }
 
+# NOTE: comment these lines out to include percentage columns
+
 # drop total percentage column
 df <- merge_simulation_data(file_path)
 df <- select(df, -contains("total_pct"))
@@ -76,6 +78,9 @@ df <- df %>%
     )
   ) %>%
   ungroup()
+
+# drop percentage column
+df <- select(df, -contains("pct"))
 
 print(head(df, 10))
 write.csv(df, "benchmark_stats/all_stats.csv", row.names = FALSE)

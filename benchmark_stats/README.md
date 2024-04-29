@@ -14,4 +14,8 @@
     - NQueens 11 (30 min)
     - Sorting 131072 (20 min)
     - Dijkstras 2500 (45 min)
+- `all_stats_v4.csv`: large problem sizes (nq, sorts)
+    - NQueens 12 (2hr)
+    - Mergesort 524288 (1.5hr)
+    - Quicksort 1048576 (1.75hr)
 
