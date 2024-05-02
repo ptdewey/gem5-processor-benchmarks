@@ -15,21 +15,16 @@ if (!file.exists(file_path)) {
 }
 df <- read_csv(file_path)
 
-# TODO: filter out specified metrics
-
 search_metric <- function(search_string, data = df) {
-  matching_rows <- data %>%
-    filter(metric == search_string)
+    matching_rows <- data %>%
+        filter(metric == search_string)
 
-  if (nrow(matching_rows) == 0) {
-    # return(tibble(matrix(ncol = ncol(data), nrow = 1, dimnames = list(NULL, colnames(data)))))
-    return()
-  } else {
-    return(matching_rows)
-  }
+    if (nrow(matching_rows) == 0) {
+        return()
+    } else {
+        return(matching_rows)
+    }
 }
-
-print(search_metric("system.cpu.cpi"))
 
 mdf <- bind_rows(
     # system metrics
@@ -125,3 +120,17 @@ mdf <- bind_rows(
 
 print(mdf)
 write.csv(mdf, "benchmark_stats/filtered_stats.csv")
+
+process_benchmark_division <- function(df) {
+    benchmarks <- unique(gsub("-(Broadwell|Skylake)-X86_count", "", names(df)[grepl("Broadwell", names(df))]))
+    result_df <- df %>% select(metric)
+    for (benchmark in benchmarks) {
+        skylake_col <- paste0(benchmark, "-Skylake-X86_count")
+        broadwell_col <- paste0(benchmark, "-Broadwell-X86_count")
+        result_df[[paste0(benchmark, "_ratio")]] <- df[[skylake_col]] / df[[broadwell_col]]
+    }
+
+    return(result_df)
+}
+
+write.csv(process_benchmark_division(mdf), "benchmark_stats/ratio_filtered_stats.csv")
