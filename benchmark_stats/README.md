@@ -15,7 +15,9 @@
     - Sorting 131072 (20 min)
     - Dijkstras 2500 (45 min)
 - `all_stats_v4.csv`: large problem sizes (nq, sorts)
+    - GEMM 256 (55 min)
     - NQueens 12 (2hr)
     - Mergesort 524288 (1.5hr)
     - Quicksort 1048576 (1.75hr)
+    - Dijkstras 2500 (45 min)
 

@@ -68,16 +68,16 @@ df <- select(df, -contains("total_pct"))
 
 # drop entirely 0/NA rows
 df <- df %>%
-  rowwise() %>%
-  filter(
-    !all(
-      is.na(c_across(ends_with("_count"))) |
-      c_across(ends_with("_count")) == 0,
-      is.na(c_across(ends_with("_pct"))) |
-      c_across(ends_with("_pct")) == 0
-    )
-  ) %>%
-  ungroup()
+    rowwise() %>%
+    filter(
+        !all(
+            is.na(c_across(ends_with("_count"))) |
+            c_across(ends_with("_count")) == 0,
+            is.na(c_across(ends_with("_pct"))) |
+            c_across(ends_with("_pct")) == 0
+        )
+    ) %>%
+    ungroup()
 
 # drop percentage column
 df <- select(df, -contains("pct"))
@@ -85,3 +85,5 @@ df <- select(df, -contains("pct"))
 print(head(df, 10))
 write.csv(df, "benchmark_stats/all_stats.csv", row.names = FALSE)
 
+
+# TODO: filter out specified metrics
