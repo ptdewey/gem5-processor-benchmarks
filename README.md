@@ -4,7 +4,7 @@
 
 The project writeup will be submitted on canvas and not included in the GitHub Repository
 
-[Project Repository](https://github.com/ptdewey/gem5-processor-benchmarks/tree/main/analysis)
+[Project Repository](https://github.com/ptdewey/gem5-processor-benchmarks/)
 
 ### Scripts
 We wrote a number of scripts to assist with compiling and running our simulations, each of which can be found in the project root directory on GitHub.
