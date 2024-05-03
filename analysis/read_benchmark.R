@@ -84,6 +84,3 @@ df <- select(df, -contains("pct"))
 
 print(head(df, 10))
 write.csv(df, "benchmark_stats/all_stats.csv", row.names = FALSE)
-
-
-# TODO: filter out specified metrics
