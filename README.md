@@ -38,6 +38,7 @@ We used 5 different benchmarks for our evaluation, each of which can be found in
     - Quicksort
 
 
+Each of these benchmarks are written in C, and were compiled using the GNU C Compiler (gcc) for our simulations.
 Problem sizes can be modified individually for each benchmark in a `#define` directive near the top of the file. See the writeup for problem sizes we used for analysis.
 
 
@@ -48,9 +49,9 @@ We also wrote a few scripts to assist with our analysis, each of which can be fo
 
 ## How to Run
 
-1. Clone repo and move contents to `gem5_workspace` directory
+1. Clone repo and move contents to `gem5_workspace` directory (they have to be directly in this directory)
 2. Run `make` in project root directory or run `./compile.sh` with no arguments
-3. Run `./run.sh` and it will run if there are no issues
+3. Run `./run.sh`, and the simulations will run if there are no issues
 4. Statistics will be available in `benchmark_stats/` with stat files named based on ISA, binary, and processor name
 5. (Optional) If aggregation is desired, run `Rscript analysis/read_benchmark.R benchmark_stats` on a system with R installed, and a file called `all_stats.csv` will be created in the `benchmark_stats` directory.
 
